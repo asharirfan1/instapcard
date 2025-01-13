@@ -119,11 +119,11 @@ class SubscriptionController extends AppBaseController
     {
         $cashPaymentPlan = Subscription::where('tenant_id', Auth::user()->tenant_id)->where('payment_type', 'cash')->where('status', Subscription::PENDING)->first();
 
-//        if ($cashPaymentPlan && !$cashPaymentPlan->isExpired()) {
-//            Flash::error(__('messages.wait_for_apporove_of_cash_payment_by_admin'));
-//
-//            return Redirect::back();
-//        }
+        if ($cashPaymentPlan && !$cashPaymentPlan->isExpired()) {
+            Flash::error(__('messages.wait_for_apporove_of_cash_payment_by_admin'));
+
+            return Redirect::back();
+        }
         $plans = Plan::with(['currency', 'planFeature'])->whereStatus(Plan::IS_ACTIVE)->whereIsDefault(Plan::IS_DEACTIVE)->get();
 
         $monthlyPlans = $plans->where('frequency', Plan::MONTHLY);
