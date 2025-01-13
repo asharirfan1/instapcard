@@ -147,6 +147,7 @@ listenChange("#paymentType", function () {
         $('.manuallyPayAttachment').addClass('d-none')
         $('.myFatoorahPayment').removeClass('d-none')
     }
+
 });
 
 listenClick(".paymentByMyFatoorah", function () {
