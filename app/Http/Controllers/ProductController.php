@@ -159,6 +159,24 @@ class ProductController extends AppBaseController
                 ], __('messages.nfc.razorpay_session_success'));
             }
 
+            if ($input['payment_method'] == Product::FATOORAH) {
+                if (isset($currency) && !in_array(strtoupper($currency), getMyFatoorahSupportedCurrencies())) {
+
+                    return $this->sendError(__('messages.placeholder.this_currency_is_not_supported_fatoorah'));
+                }
+
+                /** @var MyFatoorahController $MyFatoorahController */
+                $MyFatoorahController = App::make(MyFatoorahController::class);
+
+                $result = $MyFatoorahController->buyProductOnboard($input, $product);
+                DB::commit();
+                return $this->sendResponse([
+                    'payment_method' => $input['payment_method'],
+                    $result,
+                ], __('messages.placeholder.fatoorah_session_created'));
+            }
+
+
             //manually
             if ($input['payment_method'] == Product::MANUALLY) {
 
@@ -239,6 +257,6 @@ class ProductController extends AppBaseController
         $product->status = $status;
         $product->save();
 
-        return redirect()->back()->with('success',  __('messages.flash.product_status_change'));
+        return redirect()->back()->with('success', __('messages.flash.product_status_change'));
     }
 }

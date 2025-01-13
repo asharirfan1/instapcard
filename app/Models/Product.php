@@ -93,6 +93,7 @@ class Product extends Model implements HasMedia
     const PHONEPE = 4;
     const PAYSTACK = 5;
     const FLUTTERWAVE = 7;
+    const FATOORAH = 8;
     const SELECT_PAYMENT_GATEWAY = 0;
 
 
@@ -106,6 +107,7 @@ class Product extends Model implements HasMedia
         self::PHONEPE => 'PhonePe',
         self::PAYSTACK => 'Paystack',
         self::FLUTTERWAVE => 'Flutterwave',
+        self::FATOORAH => 'Fatoorah',
     ];
     const APPROVED = 0;
 

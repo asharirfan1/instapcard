@@ -136,7 +136,51 @@ listenChange("#paymentType", function () {
         $(".ManuallyPayment").addClass("d-none");
         $(".manuallyPayAttachment").addClass("d-none");
     }
+
+    if (paymentType == 8) {
+        $('.proceed-to-payment').addClass('d-none');
+        $('.paystackPayment').addClass('d-none');
+        $(".phonepePayment").addClass("d-none");
+        $(".flutterwavePayment").addClass("d-none");
+        $('.RazorPayPayment').addClass('d-none');
+        $('.ManuallyPayment').addClass('d-none')
+        $('.manuallyPayAttachment').addClass('d-none')
+        $('.myFatoorahPayment').removeClass('d-none')
+    }
 });
+
+listenClick(".paymentByMyFatoorah", function () {
+    console.log('isnide')
+    $(".paymentByMyFatoorah").text("Please Wait...");
+    let pricing = typeof fromPricing != "undefined" ? fromPricing : null;
+    $(this).addClass("disabled");
+    $.ajax({
+        type: "GET",
+        url: route("my-fatoorah.init"),
+        data: {
+            planId: $(this).data("id"),
+            from_pricing: pricing,
+            payment_type: $("#paymentType option:selected").val(),
+            couponCode: $("#couponCode").val(),
+            couponCodeId: $("#couponCodeId").val(),
+        },
+        success: function (result) {
+            if (result.link) {
+                window.location.href = result.link;
+            }
+        },
+        error: function (error) {
+            displayErrorMessage(error.responseJSON.message);
+            $(".paymentByMyFatoorah").text("Pay / Switch Plan");
+            $(this).removeClass("disabled");
+        },
+        complete: function () {},
+    });
+})
+
+
+
+
 listenClick(".manuallyPay", function () {
     $(this).addClass("disabled");
 });

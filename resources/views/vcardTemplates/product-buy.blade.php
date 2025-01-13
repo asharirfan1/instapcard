@@ -28,20 +28,21 @@
                     {{ Form::label('address', __('messages.setting.address') . ' :', ['class' => 'form-label required']) }}
                     {{ Form::textarea('address', null, ['class' => 'form-control custom-placeholder', 'placeholder' => __('messages.setting.address'), 'id' => 'address', 'rows' => 2, 'required']) }}
                 </div>
-                @php
-                $enabledPaymentMethods = [];
-                $stripeEnabled = getUserSettingValue('stripe_enable', $vcard->user->id) ? $enabledPaymentMethods[1] = \App\Models\Product::STRIPE : null;
-                $paypalEnabled = getUserSettingValue('paypal_enable', $vcard->user->id) ? $enabledPaymentMethods[2] = \App\Models\Product::PAYPAL : null;
-                $flutterwaveEnabled = getUserSettingValue('flutterwave_enable', $vcard->user->id) ? $enabledPaymentMethods[7] = \App\Models\Product::FLUTTERWAVE : null;
-                $paystackEnabled = getUserSettingValue('paytack_enable', $vcard->user->id) ? $enabledPaymentMethods[5] = \App\Models\Product::PAYSTACK : null;
-                $manuallyEnabled = getUserSettingValue('manually_payment', $vcard->user->id) ? $enabledPaymentMethods[3] = \App\Models\Product::MANUALLY : null;
-                $phonepeEnabled = getUserSettingValue('phonepe_enable', $vcard->user->id) ? $enabledPaymentMethods[4] = \App\Models\Product::PHONEPE : null;
-                $razorpayEnabled = getUserSettingValue('rozorpay_enable', $vcard->user->id) ? $enabledPaymentMethods[6] = \App\Models\Product::RAZORPAY : null;
+                    @php
+                    $enabledPaymentMethods = [];
+                    $stripeEnabled = getUserSettingValue('stripe_enable', $vcard->user->id) ? $enabledPaymentMethods[1] = \App\Models\Product::STRIPE : null;
+                    $paypalEnabled = getUserSettingValue('paypal_enable', $vcard->user->id) ? $enabledPaymentMethods[2] = \App\Models\Product::PAYPAL : null;
+                    $flutterwaveEnabled = getUserSettingValue('flutterwave_enable', $vcard->user->id) ? $enabledPaymentMethods[7] = \App\Models\Product::FLUTTERWAVE : null;
+                    $paystackEnabled = getUserSettingValue('paytack_enable', $vcard->user->id) ? $enabledPaymentMethods[5] = \App\Models\Product::PAYSTACK : null;
+                    $manuallyEnabled = getUserSettingValue('manually_payment', $vcard->user->id) ? $enabledPaymentMethods[3] = \App\Models\Product::MANUALLY : null;
+                    $phonepeEnabled = getUserSettingValue('phonepe_enable', $vcard->user->id) ? $enabledPaymentMethods[4] = \App\Models\Product::PHONEPE : null;
+                    $razorpayEnabled = getUserSettingValue('rozorpay_enable', $vcard->user->id) ? $enabledPaymentMethods[6] = \App\Models\Product::RAZORPAY : null;
+                    $razorpayEnabled = getUserSettingValue('fatoorah_enable', $vcard->user->id) ? $enabledPaymentMethods[8] = \App\Models\Product::FATOORAH : null;
 
-                $translatedPaymentTypes = collect($enabledPaymentMethods)->map(function ($value) {
-                    return $value !== null ? trans('messages.' . \App\Models\Product::PAYMENT_METHOD[$value]) : null;
-                });
-            @endphp
+                    $translatedPaymentTypes = collect($enabledPaymentMethods)->map(function ($value) {
+                        return $value !== null ? trans('messages.' . \App\Models\Product::PAYMENT_METHOD[$value]) : null;
+                    });
+                @endphp
             <div class="mb-3">
                 {{ Form::label('payment_method', __('messages.common.payment_methods') . ' :', ['class' => 'form-label required']) }}
                 {{ Form::select('payment_method', $translatedPaymentTypes, null, ['class' => 'form-control custom-placeholder  form-select form-select-solid select2Selector', 'data-control' => 'select2', 'required', 'id' => 'productPaymentMethod', 'placeholder' => __('messages.common.payment_methods')]) }}

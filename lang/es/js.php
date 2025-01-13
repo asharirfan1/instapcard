@@ -112,6 +112,8 @@ return [
     'stripe_secret' => 'El campo de secreto de Stripe es obligatorio.',
     'paystack_key' => 'El campo de clave de Paystack es obligatorio.',
     'paystack_secret' => 'El campo de secreto de Paystack es obligatorio.',
+    'fatoorah_api_key' => 'MyFatoorah API key',
+    'fatoorah_secret' => 'MyFatoorah Secret',
     'flutterwave_key' => 'El campo de clave de Flutterwave es obligatorio.',
     'flutterwave_secret' => 'El campo de secreto de Flutterwave es obligatorio.',
     'razorpay_key' => 'El campo clave de Rozorpay es obligatorio.',

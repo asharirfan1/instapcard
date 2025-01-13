@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(DefaultLanguageSettingsSeeder::class);
         $this->call(DefaultUserLanguageSettingsSeeder::class);
         $this->call(TermsConditionsSeeder::class);
-                $this->call(SuperAdminFatoorahKey::class);
+        $this->call(SuperAdminFatoorahKey::class);
+        $this->call(AddFatoorahKeyToSuperAdminSetting::class);
 
     }
 }

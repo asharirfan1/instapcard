@@ -179,7 +179,7 @@
                         </div>
                         {{--  MyFattorah --}}
                                 <div class="col-12 d-flex align-items-center">
-                                    <span class="fs-3 my-3 me-3">{{ __('messages.setting.myFatoorah') }}</span>
+                                    <span class="fs-3 my-3 me-3">{{ __('messages.MyFatoorah') }}</span>
                                     <label class="form-switch">
                                         <input type="checkbox" name="fatoorah_enable"
                                                class="form-check-input fatoorah-enable"

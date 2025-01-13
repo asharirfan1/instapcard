@@ -53,6 +53,11 @@ class UpdatePaymentRequest extends FormRequest
             $rules['phonepe_salt_index'] = 'required';
         }
 
+
+        if (isset($paymentGateways[Plan::MYFATOORAH])) {
+            $rules['fatoorah_api_key'] = 'required';
+        }
+
         return $rules;
     }
 }

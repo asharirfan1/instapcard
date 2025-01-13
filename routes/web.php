@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FlutterwaveController;
+use App\Http\Controllers\MyFatoorahController;
 use App\Http\Controllers\UserFlutterwaveController;
 use App\Http\Middleware\XSS;
 use Illuminate\Support\Facades\Auth;
@@ -165,6 +166,18 @@ Route::middleware(['freshInstall'])->group(function () {
                 Route::get('flutterwave-subscription-success', [FlutterwaveController::class, 'flutterwaveSubscriptionSuccess'])->name('flutterwave.subscription.success');
                 Route::get('flutterwave-nfcOrder-success', [FlutterwaveController::class, 'flutterwaveNfcOrderSuccess'])->name('flutterwave.nfcOrder.success');
 
+
+                // My fatoorah routes
+                Route::get('init-my-fatoorah', [MyFatoorahController::class, 'init'])->name('my-fatoorah.init');
+                Route::get('my-fatoorah/success', [MyFatoorahController::class, 'success'])->name('my-fatoorah.success');
+                Route::get('my-fatoorah/failure', [MyFatoorahController::class, 'failure'])->name('my-fatoorah.failure');
+
+
+                //My Fatoorah user payment
+                Route::get('product-paypal-payment-success', [MyFatoorahController::class, 'productBuySuccess'])->name('fatoorah.buy.product.success');
+                Route::get('product-paypal-payment-failed', [MyFatoorahController::class, 'productBuyFailed'])->name('fatoorah.buy.product.failed');
+
+
                 //paystack routes
                 Route::get('paystack-onboard', [PaystackController::class, 'redirectToGateway'])->name('paystack.init');
                 Route::get('paystack-payment-success', [PaystackController::class, 'handleGatewayCallback'])->name('paystack.success');
@@ -181,183 +194,182 @@ Route::middleware(['freshInstall'])->group(function () {
                     ->name('nfc.razorpay.failed');
 
                 // Route::middleware('subscription')->group(function () {
-                    //admin dashboard route
-                    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+                //admin dashboard route
+                Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+                Route::get(
+                    '/vcard/{vcard}/analytics',
+                    [VcardController::class, 'analytics']
+                )->name('vcard.analytics')->middleware(['checkVcardAnalyst']);
+                Route::get(
+                    '/vcard/subscribers/{vcard}',
+                    [VcardController::class, 'showSubscribers']
+                )->name('vcard.showSubscribers');
+                Route::get(
+                    '/vcard/contact/{vcard}',
+                    [VcardController::class, 'showContact']
+                )->name('vcard.showContact');
+                Route::get('/inquiries', [EnquiryController::class, 'enquiryList'])->name('inquiries.index');
+                Route::get('inquiries-attachment-download/{id}', [EnquiryController::class, 'inquiriesAttachmentDownload'])->name('inquiries.attachment.download');
+                Route::get(
+                    '/appointments',
+                    [ScheduleAppointmentController::class, 'appointmentsList']
+                )->name('appointments.index');
+                Route::post(
+                    '/appointments/status/{appointment}',
+                    [ScheduleAppointmentController::class, 'appointmentsUpdate']
+                )->name('appointments.update');
+                Route::get(
+                    '/appointments-calendar',
+                    [ScheduleAppointmentController::class, 'appointmentCalendar']
+                )->name('appointments.calendar');
+                Route::delete('appointment/{appointment}', [
+                    ScheduleAppointmentController::class,
+                    'destroy',
+                ])->name('appointments.destroy')->middleware('checkVcardEnquiry');
+                Route::get('/appointment-status', [ScheduleAppointmentController::class, 'paymentStatus'])->name('payment.status');
+
+
+                Route::get('/vcard/status/{vcard}', [VcardController::class, 'updateStatus'])->name('vcard.status');
+                Route::post('/vcard/section-view', [VcardController::class, 'vcardViewType'])->name('vcard.table.view');
+                Route::prefix('vcard')->group(function () {
+                    //VCard services
+                    Route::get('{vcard}/services', [VcardServiceController::class, 'index'])->name('vcard.service.index');
+                    Route::post('services', [VcardServiceController::class, 'store'])->name('vcard.service.store');
+                    Route::get('/services/services_slider_view/{vcard}', [VcardController::class, 'servicesSliderView'])->name('vcard.services.slider_view');
                     Route::get(
-                        '/vcard/{vcard}/analytics',
-                        [VcardController::class, 'analytics']
-                    )->name('vcard.analytics')->middleware(['checkVcardAnalyst']);
-                    Route::get(
-                        '/vcard/subscribers/{vcard}',
-                        [VcardController::class, 'showSubscribers']
-                    )->name('vcard.showSubscribers');
-                    Route::get(
-                        '/vcard/contact/{vcard}',
-                        [VcardController::class, 'showContact']
-                    )->name('vcard.showContact');
-                    Route::get('/inquiries', [EnquiryController::class, 'enquiryList'])->name('inquiries.index');
-                    Route::get('inquiries-attachment-download/{id}', [EnquiryController::class, 'inquiriesAttachmentDownload'])->name('inquiries.attachment.download');
-                    Route::get(
-                        '/appointments',
-                        [ScheduleAppointmentController::class, 'appointmentsList']
-                    )->name('appointments.index');
+                        'services/{vcardService}',
+                        [VcardServiceController::class, 'edit']
+                    )->name('vcard.service.edit');
                     Route::post(
-                        '/appointments/status/{appointment}',
-                        [ScheduleAppointmentController::class, 'appointmentsUpdate']
-                    )->name('appointments.update');
+                        'services/{vcardService}/update',
+                        [VcardServiceController::class, 'update']
+                    )->name('vcard.service.update');
+                    Route::delete(
+                        'services/{vcardService}',
+                        [VcardServiceController::class, 'destroy']
+                    )->name('vcard.service.destroy');
+
+                    //VCard blogs
+                    Route::get('{vcard}/blogs', [VcardBlogController::class, 'index'])->name('vcard.blogs.index');
+                    Route::post('blogs', [VcardBlogController::class, 'store'])->name('vcard.blog.store');
                     Route::get(
-                        '/appointments-calendar',
-                        [ScheduleAppointmentController::class, 'appointmentCalendar']
-                    )->name('appointments.calendar');
-                    Route::delete('appointment/{appointment}', [
-                        ScheduleAppointmentController::class,
-                        'destroy',
-                    ])->name('appointments.destroy')->middleware('checkVcardEnquiry');
-                    Route::get('/appointment-status', [ScheduleAppointmentController::class, 'paymentStatus'])->name('payment.status');
+                        'blogs/{vcardBlog}',
+                        [VcardBlogController::class, 'edit']
+                    )->name('vcard.blog.edit');
+                    Route::post(
+                        'blogs/{vcardBlog}/update',
+                        [VcardBlogController::class, 'update']
+                    )->name('vcard.blog.update');
+                    Route::delete(
+                        'blogs/{vcardBlog}',
+                        [VcardBlogController::class, 'destroy']
+                    )->name('vcard.blog.destroy');
+
+                    //gallery
+                    Route::get('{vcard}/galleries', [GalleryController::class, 'index'])->name('gallery.index');
+                    Route::post('galleries', [GalleryController::class, 'store'])->name('gallery.store');
+                    Route::get(
+                        'galleries/{gallery}',
+                        [GalleryController::class, 'edit']
+                    )->name('gallery.edit');
+                    Route::post(
+                        'galleries/{gallery}/update',
+                        [GalleryController::class, 'update']
+                    )->name('gallery.update');
+                    Route::delete(
+                        'galleries/{gallery}',
+                        [GalleryController::class, 'destroy']
+                    )->name('gallery.destroy');
+
+                    // custom links
+                    Route::resource('custom-link', CustomLinkController::class);
+                    Route::post('/custom-link/show-as-button/{customLink}', [CustomLinkController::class, 'updateShowAsButton'])->name('show-as-button');
+                    Route::post('/custom-link/open-new-tab/{customLink}', [CustomLinkController::class, 'updateOpenNewTab'])->name('open-new-tab');
+                    //gallery
+                    Route::get('{vcard}/galleries', [InstagramEmbedController::class, 'index'])->name('gallery.index');
+                    Route::post('instagram-embed', [InstagramEmbedController::class, 'store'])->name('instagram-embed.store');
+                    Route::get(
+                        'instagram-embed/{instagramembed}',
+                        [InstagramEmbedController::class, 'edit']
+                    )->name('instagram-embed.edit');
+                    Route::post(
+                        'instagram-embed/{instagramembed}/update',
+                        [InstagramEmbedController::class, 'update']
+                    )->name('instagram-embed.update');
+                    Route::delete(
+                        'instagram-embed/{instagramembed}',
+                        [InstagramEmbedController::class, 'destroy']
+                    )->name('instagram-embed.destroy');
+
+                    //vcard products
+                    Route::get('{vcard}/products', [ProductController::class, 'index'])->name('vcard.products.index');
+                    Route::post('products', [ProductController::class, 'store'])->name('vcard.products.store');
+                    Route::get(
+                        'products/{products}',
+                        [ProductController::class, 'edit']
+                    )->name('vcard.products.edit');
+                    Route::post(
+                        'products/{products}/update',
+                        [ProductController::class, 'update']
+                    )->name('vcard.products.update');
+                    Route::delete(
+                        'products/{products}',
+                        [ProductController::class, 'destroy']
+                    )->name('vcard.products.destroy');
 
 
-                    Route::get('/vcard/status/{vcard}', [VcardController::class, 'updateStatus'])->name('vcard.status');
-                    Route::post('/vcard/section-view', [VcardController::class, 'vcardViewType'])->name('vcard.table.view');
-                    Route::prefix('vcard')->group(function () {
-                        //VCard services
-                        Route::get('{vcard}/services', [VcardServiceController::class, 'index'])->name('vcard.service.index');
-                        Route::post('services', [VcardServiceController::class, 'store'])->name('vcard.service.store');
-                        Route::get('/services/services_slider_view/{vcard}', [VcardController::class, 'servicesSliderView'])->name('vcard.services.slider_view');
-                        Route::get(
-                            'services/{vcardService}',
-                            [VcardServiceController::class, 'edit']
-                        )->name('vcard.service.edit');
-                        Route::post(
-                            'services/{vcardService}/update',
-                            [VcardServiceController::class, 'update']
-                        )->name('vcard.service.update');
-                        Route::delete(
-                            'services/{vcardService}',
-                            [VcardServiceController::class, 'destroy']
-                        )->name('vcard.service.destroy');
-
-                        //VCard blogs
-                        Route::get('{vcard}/blogs', [VcardBlogController::class, 'index'])->name('vcard.blogs.index');
-                        Route::post('blogs', [VcardBlogController::class, 'store'])->name('vcard.blog.store');
-                        Route::get(
-                            'blogs/{vcardBlog}',
-                            [VcardBlogController::class, 'edit']
-                        )->name('vcard.blog.edit');
-                        Route::post(
-                            'blogs/{vcardBlog}/update',
-                            [VcardBlogController::class, 'update']
-                        )->name('vcard.blog.update');
-                        Route::delete(
-                            'blogs/{vcardBlog}',
-                            [VcardBlogController::class, 'destroy']
-                        )->name('vcard.blog.destroy');
-
-                        //gallery
-                        Route::get('{vcard}/galleries', [GalleryController::class, 'index'])->name('gallery.index');
-                        Route::post('galleries', [GalleryController::class, 'store'])->name('gallery.store');
-                        Route::get(
-                            'galleries/{gallery}',
-                            [GalleryController::class, 'edit']
-                        )->name('gallery.edit');
-                        Route::post(
-                            'galleries/{gallery}/update',
-                            [GalleryController::class, 'update']
-                        )->name('gallery.update');
-                        Route::delete(
-                            'galleries/{gallery}',
-                            [GalleryController::class, 'destroy']
-                        )->name('gallery.destroy');
-
-                        // custom links
-                        Route::resource('custom-link', CustomLinkController::class);
-                        Route::post('/custom-link/show-as-button/{customLink}', [CustomLinkController::class, 'updateShowAsButton'])->name('show-as-button');
-                        Route::post('/custom-link/open-new-tab/{customLink}', [CustomLinkController::class, 'updateOpenNewTab'])->name('open-new-tab');
-                        //gallery
-                        Route::get('{vcard}/galleries', [InstagramEmbedController::class, 'index'])->name('gallery.index');
-                        Route::post('instagram-embed', [InstagramEmbedController::class, 'store'])->name('instagram-embed.store');
-                        Route::get(
-                            'instagram-embed/{instagramembed}',
-                            [InstagramEmbedController::class, 'edit']
-                        )->name('instagram-embed.edit');
-                        Route::post(
-                            'instagram-embed/{instagramembed}/update',
-                            [InstagramEmbedController::class, 'update']
-                        )->name('instagram-embed.update');
-                        Route::delete(
-                            'instagram-embed/{instagramembed}',
-                            [InstagramEmbedController::class, 'destroy']
-                        )->name('instagram-embed.destroy');
-
-                        //vcard products
-                        Route::get('{vcard}/products', [ProductController::class, 'index'])->name('vcard.products.index');
-                        Route::post('products', [ProductController::class, 'store'])->name('vcard.products.store');
-                        Route::get(
-                            'products/{products}',
-                            [ProductController::class, 'edit']
-                        )->name('vcard.products.edit');
-                        Route::post(
-                            'products/{products}/update',
-                            [ProductController::class, 'update']
-                        )->name('vcard.products.update');
-                        Route::delete(
-                            'products/{products}',
-                            [ProductController::class, 'destroy']
-                        )->name('vcard.products.destroy');
+                    //VCard banner
+                    Route::get('{vcard}/banners', [BannerController::class, 'index'])->name('banner.index');
+                    Route::post('banners', [BannerController::class, 'store'])->name('banner.store');
+                    // Route::get(
+                    //     'testimonials/{testimonial}',
+                    //     [TestimonialController::class, 'edit']
+                    // )->name('testimonial.edit');
+                    // Route::post(
+                    //     'testimonials/{testimonial}/update',
+                    //     [TestimonialController::class, 'update']
+                    // )->name('testimonial.update');
+                    // Route::delete(
+                    //     'testimonials/{testimonial}',
+                    //     [TestimonialController::class, 'destroy']
+                    // )->name('testimonial.destroy');
 
 
+                    Route::post('/product-orders/{id}/{status}', [ProductController::class, 'updateProductStatus'])->name('update-product-status');
+                    //VCard testimonial
+                    Route::get('{vcard}/testimonials', [TestimonialController::class, 'index'])->name('testimonial.index');
+                    Route::post('testimonials', [TestimonialController::class, 'store'])->name('testimonial.store');
+                    Route::get(
+                        'testimonials/{testimonial}',
+                        [TestimonialController::class, 'edit']
+                    )->name('testimonial.edit');
+                    Route::post(
+                        'testimonials/{testimonial}/update',
+                        [TestimonialController::class, 'update']
+                    )->name('testimonial.update');
+                    Route::delete(
+                        'testimonials/{testimonial}',
+                        [TestimonialController::class, 'destroy']
+                    )->name('testimonial.destroy');
 
-                        //VCard banner
-                        Route::get('{vcard}/banners', [BannerController::class, 'index'])->name('banner.index');
-                        Route::post('banners', [BannerController::class, 'store'])->name('banner.store');
-                        // Route::get(
-                        //     'testimonials/{testimonial}',
-                        //     [TestimonialController::class, 'edit']
-                        // )->name('testimonial.edit');
-                        // Route::post(
-                        //     'testimonials/{testimonial}/update',
-                        //     [TestimonialController::class, 'update']
-                        // )->name('testimonial.update');
-                        // Route::delete(
-                        //     'testimonials/{testimonial}',
-                        //     [TestimonialController::class, 'destroy']
-                        // )->name('testimonial.destroy');
+                    //vcard iframes
+                    Route::post('iframes', [iframeController::class, 'store'])->name('iframe.store');
 
+                    Route::get(
+                        'iframe/{iframe}',
+                        [IframeController::class, 'edit']
+                    )->name('iframe.edit');
 
-                        Route::post('/product-orders/{id}/{status}', [ProductController::class, 'updateProductStatus'])->name('update-product-status');
-                        //VCard testimonial
-                        Route::get('{vcard}/testimonials', [TestimonialController::class, 'index'])->name('testimonial.index');
-                        Route::post('testimonials', [TestimonialController::class, 'store'])->name('testimonial.store');
-                        Route::get(
-                            'testimonials/{testimonial}',
-                            [TestimonialController::class, 'edit']
-                        )->name('testimonial.edit');
-                        Route::post(
-                            'testimonials/{testimonial}/update',
-                            [TestimonialController::class, 'update']
-                        )->name('testimonial.update');
-                        Route::delete(
-                            'testimonials/{testimonial}',
-                            [TestimonialController::class, 'destroy']
-                        )->name('testimonial.destroy');
+                    Route::post(
+                        'iframe/{iframe}/update',
+                        [IframeController::class, 'update']
+                    )->name('iframe.update');
 
-                        //vcard iframes
-                        Route::post('iframes', [iframeController::class, 'store'])->name('iframe.store');
-
-                        Route::get(
-                            'iframe/{iframe}',
-                            [IframeController::class, 'edit']
-                        )->name('iframe.edit');
-
-                        Route::post(
-                            'iframe/{iframe}/update',
-                            [IframeController::class, 'update']
-                        )->name('iframe.update');
-
-                        Route::delete(
-                            'iframe/{iframe}',
-                            [IframeController::class, 'destroy']
-                        )->name('iframe.destroy');
+                    Route::delete(
+                        'iframe/{iframe}',
+                        [IframeController::class, 'destroy']
+                    )->name('iframe.destroy');
                     // });
 
                     Route::get(
@@ -550,6 +562,8 @@ Route::middleware(['freshInstall'])->group(function () {
             });
 
             Route::get('/settings', [SettingController::class, 'index'])->name('setting.index');
+
+
             Route::get('/upgradeDatabase', [SettingController::class, 'upgradeDatabase'])->name('setting.upgradeDatabase');
             Route::post(
                 '/settings',
@@ -732,7 +746,6 @@ Route::middleware(['freshInstall'])->group(function () {
         'apply-coupon-code/{couponCode?}',
         [CouponCodeController::class, 'applyCouponCode']
     )->name('apply-coupon-code')->middleware('auth');
-
 
 
     Route::middleware('auth', 'valid.user', 'role:super_admin', 'xss')->group(function () {

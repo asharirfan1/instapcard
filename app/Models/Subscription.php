@@ -76,6 +76,7 @@ class Subscription extends Model implements HasMedia
     const TYPE_PAYPAL = 2;
 
     const TYPE_RAZORPAY = 3;
+    const TYPE_MYFATOORAH = 4;
 
     const STRIPE = 1;
 
@@ -90,6 +91,7 @@ class Subscription extends Model implements HasMedia
     const PHONEPE = 6;
 
     const FLUTTERWAVE = 7;
+    const MYFATOORAH = 8;
 
     const PAYMENT_GATEWAY = [
         self::STRIPE => 'Stripe',
@@ -99,6 +101,7 @@ class Subscription extends Model implements HasMedia
         self::PAYSTACK => 'Paystack',
         self::PHONEPE => 'PhonePe',
         self::FLUTTERWAVE => 'Flutterwave',
+        self::MYFATOORAH => 'MyFatoorah',
     ];
 
     const PAYMENT_TYPES = [
@@ -106,6 +109,7 @@ class Subscription extends Model implements HasMedia
         self::TYPE_STRIPE => 'Stripe',
         self::TYPE_PAYPAL => 'PayPal',
         self::TYPE_RAZORPAY => 'RazorPay',
+        self::TYPE_MYFATOORAH => 'MyFatoorah',
     ];
 
     const TYPE = [
@@ -113,6 +117,7 @@ class Subscription extends Model implements HasMedia
         'paypal' => 'PayPal',
         'razorpay' => 'RazorPay',
         'manually' => 'Manually',
+        'myFatoorah' => 'MyFatoorah',
     ];
 
     const ACTIVE = 1;
@@ -165,7 +170,7 @@ class Subscription extends Model implements HasMedia
     {
         /** @var Media $media */
         $media = $this->getMedia(self::ATTACHMENT_PATH)->first();
-        if (! empty($media)) {
+        if (!empty($media)) {
             return $media->getFullUrl();
         }
 
@@ -203,7 +208,7 @@ class Subscription extends Model implements HasMedia
         }
 
         // this means the subscription is ended.
-        if ((! empty($this->trial_ends_at) && $this->trial_ends_at < $now) || $this->ends_at < $now) {
+        if ((!empty($this->trial_ends_at) && $this->trial_ends_at < $now) || $this->ends_at < $now) {
             return true;
         }
 

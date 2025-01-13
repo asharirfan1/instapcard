@@ -36,6 +36,7 @@
         "livewire/livewire": "^3.4",
         "mariuzzo/laravel-js-localization": "^1.10",
         "mews/purifier": "^3.4",
+        "myfatoorah/library": "^2.2",
         "mhmiton/laravel-modules-livewire": "^2.3",
         "nwidart/laravel-modules": "^v10.0",
         "opcodesio/log-viewer": "^3.8",

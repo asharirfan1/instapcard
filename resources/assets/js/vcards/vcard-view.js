@@ -19,9 +19,11 @@ function displayError(selector, msg) {
         $(selector).slideUp();
     }, 3000);
 }
+
 let selectedDate;
 let selectedSlotTime;
 let timezone_offset_minutes;
+
 function loadVcardView() {
     let urlStr = window.location.href;
     if (urlStr.indexOf("?") != -1) {
@@ -207,6 +209,13 @@ listenSubmit("#addAppointmentForm", function (event) {
                         if (result.data[0].original.link) {
                             window.location.href = result.data[0].original.link
                         }
+                    }
+                    if (result.data.payment_method == 8) {
+                        console.log('inside 4')
+                        if (result.data[0].original.link) {
+                            window.location.href = result.data[0].original.link;
+                        }
+
                     }
                 }
                 displaySuccessMessage(result.message);
@@ -673,7 +682,8 @@ listen("click", ".paymentByPaypal", function () {
                 position: "topRight",
             });
         },
-        complete: function () { },
+        complete: function () {
+        },
     });
 });
 
@@ -861,6 +871,12 @@ listenSubmit("#productBuyForm", function (event) {
                 if (result.data.payment_method == 7) {
                     window.location.href = result.data[0];
                 }
+                if (result.data.payment_method == 8) {
+                    if (result.data[0].original.link) {
+                        window.location.href = result.data[0].original.link;
+                    }
+                }
+
 
                 if (!isEmpty(result.data)) {
                     if (result.data.payment_method == 1) {
@@ -871,9 +887,9 @@ listenSubmit("#productBuyForm", function (event) {
                     }
                     if (result.data[0].payment_method == 6) {
 
-                        let { id, amount, name, email, contact } = result.data[0]
+                        let {id, amount, name, email, contact} = result.data[0]
                         if (result.data[0]) {
-                            let { id, amount, name, email, contact } = result.data[0];
+                            let {id, amount, name, email, contact} = result.data[0];
                             options.amount = amount
                             options.order_id = id
                             options.prefill = {
@@ -930,7 +946,7 @@ window.onload = function () {
     $.ajax({
         url: route("getCookie"),
         type: "GET",
-        data: { url: currentPageUrl },
+        data: {url: currentPageUrl},
         success: function (result) {
             if (result.success) {
                 setTimeout(function () {
@@ -1103,8 +1119,8 @@ listenSubmit("#askContactDetailForm", function (event) {
     event.preventDefault();
     var vcard_id = $("#vcard_id").val();
     $.ajax({
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        url: route("contact-request.store", { "alias": vcardAlias }),
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: route("contact-request.store", {"alias": vcardAlias}),
         type: "POST",
         data: $(this).serialize(),
         success: function (result) {

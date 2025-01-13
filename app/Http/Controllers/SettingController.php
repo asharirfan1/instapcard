@@ -196,7 +196,7 @@ class SettingController extends AppBaseController
         }
 
         $paymentMethodKeys = [
-            'stripe_key', 'stripe_secret', 'flutterwave_key', 'flutterwave_secret', 'paypal_client_id', 'paypal_secret','paypal_mode', 'razorpay_key', 'razorpay_secret', 'paystack_key', 'paystack_secret', 'phonepe_merchant_id', 'phonepe_merchant_user_id', 'phonepe_env', 'phonepe_salt_key', 'phonepe_salt_index', 'manual_payment_guide',
+           'fatoorah_api_key', 'stripe_key', 'stripe_secret', 'flutterwave_key', 'flutterwave_secret', 'paypal_client_id', 'paypal_secret','paypal_mode', 'razorpay_key', 'razorpay_secret', 'paystack_key', 'paystack_secret', 'phonepe_merchant_id', 'phonepe_merchant_user_id', 'phonepe_env', 'phonepe_salt_key', 'phonepe_salt_index', 'manual_payment_guide',
         ];
             foreach ($paymentMethodKeys as $key) {
                     $setting = Setting::where('key', $key)->first();

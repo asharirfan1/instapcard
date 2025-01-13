@@ -5,6 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex flex-column">
+        <div class="d-flex flex-column">
             @include('flash::message')
             @include('layouts.errors')
             <div class="card">

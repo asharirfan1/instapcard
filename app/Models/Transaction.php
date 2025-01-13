@@ -79,6 +79,7 @@ class Transaction extends Model
     const PHONEPE = 4;
 
     const FLUTTERWAVE = 5;
+    const FATOORAH = 6;
 
     const TYPE = [
         self::STRIPE => 'Stripe',
@@ -86,5 +87,6 @@ class Transaction extends Model
         self::PAYSTACK => 'Paystack',
         self::PHONEPE => 'PhonePe',
         self::FLUTTERWAVE => 'Flutterwave',
+        self::FATOORAH => 'fatoorah',
     ];
 }

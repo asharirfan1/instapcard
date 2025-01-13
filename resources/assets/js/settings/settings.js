@@ -128,6 +128,13 @@ listen("click", ".stripe-enable", function () {
     $(".stripe-div").toggleClass("d-none");
 });
 
+listen("click", ".fatoorahEnable", function () {
+    $(".fatoorah-div").toggleClass("d-none");
+});
+
+listen("click", ".fatoorah-enable", function () {
+    $(".fatoorah-div").toggleClass("d-none");
+});
 listen("click", ".flutterwave-enable", function () {
     $(".flutterwave-div").toggleClass("d-none");
 });
@@ -157,12 +164,19 @@ listen("click", "#stripe_payment", function () {
     $(".stripe-cred").toggleClass("d-none");
 });
 
+listen("click", "#MyFatoorah_payment", function () {
+    $(".fatoorah-cred").toggleClass("d-none");
+});
+
 listen("click", "#phonepe_payment", function () {
     $(".phonepe-cred").toggleClass("d-none");
 });
 
 listen("click", "#paystack_payment", function () {
     $(".paystack-cred").toggleClass("d-none");
+});
+listen("click", "#fatoorah_payment", function () {
+    $(".fatoorah-cred").toggleClass("d-none");
 });
 
 listen("click", "#manually_payment", function () {
@@ -275,6 +289,13 @@ listen("submit", "#UserCredentialsSettings", function () {
         ) {
             displayErrorMessage(
                 Lang.get("js.phonepe_merchant_transaction_id_required")
+            );
+            return false;
+        }
+    }
+    if ($("#fatoorahEnable").prop("checked")) {
+        if ($("#fatoorah_api_key").val().trim().length === 0) {
+            displayErrorMessage('MyFatorah Filed Is Required'
             );
             return false;
         }

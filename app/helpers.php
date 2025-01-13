@@ -355,6 +355,13 @@ if (!function_exists('getState')){
     }
 }
 
+
+function getMyFatoorahSupportedCurrencies()
+{
+    return [
+        'KWT', 'SAU', 'ARE', 'QAT', 'BHR', 'OMN', 'JOD', 'EGY', 'KWD'
+    ];
+}
 /**
  * @return string[]
  */
@@ -1681,7 +1688,7 @@ if (!function_exists('retriveH1Card')){
 
         imagecopy($imageH1Back, $imageH1QrCode, 800, 90, 0, 0, $width, $height);
         imagettftext($imageH1Back, 16, 0, 233, 465, $white, $fontsRegular, $input['email']);
-        imagettftext($imageH1Back, 16, 0, 233, 566, $white, $fontsRegular, $phoneNumber);
+        imagettftext($imageH1Back, 16, app/helpers.php0, 233, 566, $white, $fontsRegular, $phoneNumber);
         imagettftext($imageH1Back, 16, 0, 737, 455, $white, $fontsRegular, wordwrap($input['location'], 30, "\n"));
         imagettftext($imageH1Back, 16, 0, 737, 556, $white, $fontsRegular, wordwrap($input['website'], 27, "\n", true));
         $backPAth = public_path('uploads/ecard/' . $vcard->id . '/Back.png');
